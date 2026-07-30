@@ -3,7 +3,7 @@ name: claim-to-source-auditor
 description: 审稿 / 事实核验 / 来源追溯 / 跨平台一致性检查。提取可核验主张，溯源至 L0 一手或 L1 可靠二手来源，逐条标记为 通过 / 部分支持 / 缺证 / 错误 / 判断，并输出带 P0–P2 严重度的结构化审计报告；支持跨平台版本比对与回归 gold-set 重跑。
 description_zh: 审稿核验器
 description_en: Claim-to-Source Auditor
-version: 1.0.0
+version: 1.0.1
 disable: false
 agent_created: true
 ---
@@ -23,7 +23,7 @@ agent_created: true
 
 - 风格编辑、结构批评或论证强度评估——本 Skill 只审计事实主张及其来源支撑。
 - 跨材料口径/数字一致性 → 用 `cross-material-consistency-auditor`。
-- 营销稿完整发布前合规 → 用 `content-compliance-reviewer`。
+- 营销稿完整发布前合规 → 用本地已安装的专门合规审查 Skill。
 
 ## 架构
 
@@ -89,7 +89,6 @@ agent_created: true
 - 近似数字仍是不一致；源为 5817 而审计写 5810 必须标出。
 - 跨平台年份高风险；一版"2024"另一版"2025"是错误而非转述。
 - 监管文件存在于特定司法辖区，未查管辖文本不得写"FDA、EU MDR、中国监管都说一样"。
-- 不可把市场搜索计数当需求代理；记录真实查询与所用市场，两个独立市场零结果才是供给缺口信号。
 
 ## 故障处理
 
