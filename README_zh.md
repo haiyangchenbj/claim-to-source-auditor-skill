@@ -23,7 +23,7 @@
 
 - 风格 / 结构 / 论证强度批评 → 本 Skill 只审计事实与来源。
 - 跨材料口径一致性 → `cross-material-consistency-auditor`。
-- 营销稿完整发布前合规 → `content-compliance-reviewer`。
+- 营销稿完整发布前合规 → 本地已安装的专门合规审查 Skill。
 
 ## 关键硬规则
 
