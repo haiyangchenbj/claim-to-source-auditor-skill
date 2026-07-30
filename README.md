@@ -23,7 +23,7 @@ Extracts high-risk claims from a long-form article, report, or series; traces ea
 
 - Style / structure / argument-strength critique → this skill audits facts and sources only.
 - Cross-material wording/number consistency → `cross-material-consistency-auditor`.
-- Full pre-publish compliance of a marketing draft → `content-compliance-reviewer`.
+- Full pre-publish compliance of a marketing draft → a dedicated compliance-review skill if one is installed.
 
 ## Hard rules (key)
 
