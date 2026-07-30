@@ -3,7 +3,7 @@ name: claim-to-source-auditor
 description: Audit, fact-check, verify, or cross-check an article, report, draft, or series. Extracts verifiable claims, traces them to L0 primary or L1 reliable secondary sources, marks each as pass/partial-support/missing-evidence/wrong/judgment, and produces a structured audit report with P0-P2 severity. Supports cross-platform version comparison and regression gold-set re-runs.
 description_zh: 审稿核验器
 description_en: Claim-to-Source Auditor
-version: 1.0.0
+version: 1.0.1
 disable: false
 agent_created: true
 ---
@@ -25,7 +25,7 @@ Use this skill when the user wants to:
 
 - For style editing, structure critique, or argument-strength assessment — this skill only audits factual claims and their source support.
 - For cross-material wording/number consistency across sibling materials → use `cross-material-consistency-auditor`.
-- For full pre-publish compliance review of a marketing draft → use `content-compliance-reviewer`.
+- For full pre-publish compliance review of a marketing draft → use a dedicated compliance-review skill if one is installed.
 
 ## Architecture
 
@@ -141,7 +141,6 @@ Output a structured report containing:
 - Near-miss numbers are still mismatches. An audit that reports 5810 when the source says 5817 must flag the difference.
 - Cross-platform periods are high-risk. If one version reads "2024" and the other "2025", the different year is an error, not a paraphrase.
 - Regulatory documents exist in specific jurisdictions. Never write "FDA, EU MDR, and China's regulations all say the same thing" without checking the governing text.
-- Do not treat marketplace search counts as a proxy for demand. Record the actual query and marketplace used. Zero results from two independent marketplaces is a supply-gap signal; a single marketplace failure is a search limitation.
 
 ## Failure handling
 
