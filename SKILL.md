@@ -1,11 +1,22 @@
 ---
 name: claim-to-source-auditor
-description: Audit, fact-check, verify, or cross-check an article, report, draft, or series. Extracts verifiable claims, traces them to L0 primary or L1 reliable secondary sources, marks each as pass/partial-support/missing-evidence/wrong/judgment, and produces a structured audit report with P0-P2 severity. Supports cross-platform version comparison and regression gold-set re-runs.
+slug: claim-to-source-auditor-skill
+displayName: Claim-to-Source Auditor
+description: >
+  Audit, fact-check, verify, or cross-check an article, report, draft, or series. Extracts verifiable claims, traces them to L0 primary or L1 reliable secondary sources, marks each as pass/partial-support/missing-evidence/wrong/judgment, and produces a structured audit report with P0-P2 severity. Supports cross-platform version comparison and regression gold-set re-runs. Trigger keywords: fact-check, audit article, verify sources, cross-check claims, 审稿核验, 事实核查, 来源追溯, 跨平台一致性.
 description_zh: 审稿核验器
 description_en: Claim-to-Source Auditor
-version: 1.0.1
-disable: false
+version: "1.0.2"
 agent_created: true
+read_when:
+  - "fact-check"
+  - "audit article"
+  - "verify sources"
+  - "cross-check claims"
+  - "审稿核验"
+  - "事实核查"
+  - "来源追溯"
+  - "跨平台一致性"
 ---
 
 # Claim-to-Source Auditor
