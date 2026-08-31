@@ -2,21 +2,23 @@
 name: claim-to-source-auditor
 slug: claim-to-source-auditor-skill
 displayName: Claim-to-Source Auditor
-description: >
-  Audit, fact-check, verify, or cross-check an article, report, draft, or series. Extracts verifiable claims, traces them to L0 primary or L1 reliable secondary sources, marks each as pass/partial-support/missing-evidence/wrong/judgment, and produces a structured audit report with P0-P2 severity. Supports cross-platform version comparison and regression gold-set re-runs. Trigger keywords: fact-check, audit article, verify sources, cross-check claims, 审稿核验, 事实核查, 来源追溯, 跨平台一致性.
+description: When the user asks to audit, fact-check, verify, or cross-check an
+  article, report, draft, or series. Triggered by
+  审稿/审计/核验/事实检查/来源追溯/查一下这个数据/核对/审查/跨平台一致性/三平台统一/回归检查/有没有事实错误/这个引用对不对/跟上次比有没有退化.
+  Extracts verifiable claims, traces them to L0 primary or L1 reliable secondary
+  sources, marks each as 通过/部分支持/缺证/错误/判断, and produces a structured audit
+  report with P0-P2 severity. Supports cross-platform version comparison and
+  regression gold-set re-runs. Only audits facts and sources — does not edit
+  style or argument structure.
 description_zh: 审稿核验器
 description_en: Claim-to-Source Auditor
-version: "1.0.2"
+not_for:
+  - Plagiarism or originality-detection scans
+  - Legal, regulatory, or localization compliance review (use a localization or compliance skill)
+  - Rewriting style, tone, or argument structure
+  - Formatting citations or bibliographies
+version: "1.0.5"
 agent_created: true
-read_when:
-  - "fact-check"
-  - "audit article"
-  - "verify sources"
-  - "cross-check claims"
-  - "审稿核验"
-  - "事实核查"
-  - "来源追溯"
-  - "跨平台一致性"
 ---
 
 # Claim-to-Source Auditor
@@ -35,7 +37,7 @@ Use this skill when the user wants to:
 ## Do not use
 
 - For style editing, structure critique, or argument-strength assessment — this skill only audits factual claims and their source support.
-- For cross-material wording/number consistency across sibling materials → use `cross-material-consistency-auditor`.
+- For cross-material wording/number consistency across sibling materials → use cross-material-consistency-auditor.
 - For full pre-publish compliance review of a marketing draft → use a dedicated compliance-review skill if one is installed.
 
 ## Architecture
@@ -83,15 +85,15 @@ For claims requiring external verification, search for: official judgments, comp
 
 ### Step 3: [LLM] Classify each claim
 
-Assign one of five statuses (Chinese labels retained for backward compatibility with reports; English gloss in parentheses):
+Assign one of five statuses:
 
-| Status (状态) | Criteria |
+| Status | Criteria |
 |---|---|
-| 通过 (pass) | L0 or L1 source directly supports the exact claim as written |
-| 部分支持 (partial-support) | Core event or number exists, but the text overstates scope, causation, precision, or legal meaning |
-| 缺证 (missing-evidence) | No L0 or L1 source found; only L2 or no source at all |
-| 错误 (wrong) | L0 or L1 source directly contradicts the claim |
-| 判断 (judgment) | Reasonable author analysis that no single source can prove or disprove |
+| 通过 | L0 or L1 source directly supports the exact claim as written |
+| 部分支持 | Core event or number exists, but the text overstates scope, causation, precision, or legal meaning |
+| 缺证 | No L0 or L1 source found; only L2 or no source at all |
+| 错误 | L0 or L1 source directly contradicts the claim |
+| 判断 | Reasonable author analysis that no single source can prove or disprove |
 
 Assign a severity:
 
@@ -107,7 +109,7 @@ When the same article exists in multiple languages or platforms, check every hig
 - Are source annotations present in every version?
 - Are regulatory conclusions translated without adding or losing meaning?
 
-Mark each item as 一致 (consistent) / 近似 (approximate) / 偏差 (deviation) / 错误 (wrong).
+Mark each item as 一致, 近似, 偏差, or 错误.
 
 ### Step 5: [LLM] Separate layers in incident attribution
 
@@ -121,14 +123,14 @@ Only layer 1 can pass as a verified fact. Layers 2 and 3 cannot be written as if
 
 ### Step 6: [Deterministic] Save a regression gold set
 
-After every audit, save the claim list and verdicts as a CSV. When the article is revised, re-run the same claims to check for regression. A gold-set item that was previously 通过 (pass) and now fails counts as a regression event.
+After every audit, save the claim list and verdicts as a CSV. When the article is revised, re-run the same claims to check for regression. A gold-set item that was previously 通过 and now fails counts as a regression event.
 
 ### Step 7: [LLM] Produce the audit report
 
 Output a structured report containing:
 
 - Article name, platform, and audit date.
-- Summary counts: total claims, 通过/部分支持/缺证/错误/判断 (pass/partial-support/missing-evidence/wrong/judgment) by severity.
+- Summary counts: total claims, 通过, 部分支持, 缺证, 错误, 判断 by severity.
 - P0 list with required corrections.
 - Cross-platform comparison (if applicable).
 - Regression check against any prior gold set.
@@ -142,7 +144,7 @@ Output a structured report containing:
 4. Separate event facts, platform/party attributions, and author interpretation — do not compress them into a single sentence.
 5. Regulatory materials define jurisdiction-specific requirements. Do not compress them into universal prohibitions.
 6. A prior fact-check report is a regression oracle, not proof that the current version is clean. Compare every historical P0/P1 item against the current text.
-7. The default for any claim without a verifiable source is 缺证 (missing-evidence), not 通过 (pass).
+7. The default for any claim without a verifiable source is 缺证, not 通过.
 8. Never invent evidence to fill a gap. If a source cannot be found, report it as a gap.
 
 ## Pitfalls
@@ -157,11 +159,11 @@ Output a structured report containing:
 
 | Scenario | Action |
 |---|---|
-| Source is behind a paywall or blocked | Mark the claim as 缺证 (missing-evidence); note the source is unavailable |
+| Source is behind a paywall or blocked | Mark the claim as 缺证; note the source is unavailable |
 | Primary source and secondary source disagree | Surface both with verbatim quotes; flag the conflict |
-| Claim involves a future prediction | Mark as 判断 (judgment); do not treat it as a fact |
-| Foreign-language regulatory text | Use an official translation if available; otherwise mark as 部分支持 (partial-support) and flag language limitation |
-| Internal operational log unavailable | Mark the claim as 部分支持 (partial-support); note which specific log is missing |
+| Claim involves a future prediction | Mark as 判断; do not treat it as a fact |
+| Foreign-language regulatory text | Use an official translation if available; otherwise mark as 部分支持 and flag language limitation |
+| Internal operational log unavailable | Mark the claim as 部分支持; note which specific log is missing |
 | Previously verified claim now fails | Flag as gold-set regression; escalate to P0 review |
 
 ## Verification
@@ -181,17 +183,3 @@ Before delivering, verify:
 3. **Gold-set CSV** (optional, for regression): one row per claim with the verdict from the most recent audit.
 
 Lead with the decision, then evidence, boundaries, and next-stage actions.
-
----
-
-## 中文摘要（Chinese Summary）
-
-本 Skill 用于审稿 / 事实核验 / 来源追溯 / 跨平台一致性检查。提取可核验主张，溯源至 L0 一手或 L1 可靠二手来源，逐条标记为 通过 / 部分支持 / 缺证 / 错误 / 判断，并输出带 P0–P2 严重度的结构化审计报告；支持跨平台版本比对与回归 gold-set 重跑。只审计事实与来源，不改写风格或论证结构。
-
-**关键约束（双语要点 / Bilingual key points）：**
-
-- **证据分级 Evidence tiers**：仅 L0 一手或 L1 可靠二手可使主张通过；L2 仅补充，不能单独支撑通过；L0 与 L1 冲突时同时呈现并标红。
-- **五状态 Five statuses**：通过 / 部分支持 / 缺证 / 错误 / 判断（保留中文标签以兼容既有报告，英文对照见正文表格）。
-- **缺证默认 Missing-by-default**：无可核验来源的主张默认判 缺证，而非 通过；绝不编造证据填补缺口。
-- **事故三层分离 Incident layers**：仅「公认发生的事实」层可作为已核验事实，平台表述层与作者解读层不得混写。
-- **回归 gold-set Regression oracle**：每次审计留存主张与结论 CSV；修订后重跑同一批主张，曾 通过 现失败即记为回归事件并升级 P0。
